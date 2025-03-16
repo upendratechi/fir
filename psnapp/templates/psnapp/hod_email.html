@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIR Request Approved by Manager - HOD Approval Required</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .button-approve {
+            background-color: #28a745;
+        }
+        .button-reject {
+            background-color: #dc3545;
+        }
+        table {
+            border: 1px solid #9e1e1e;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #9e1e1e;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h2>FIR Request Approved by Manager - HOD Approval Required</h2>
+    <p>A new PSN entry has been submitted. Here are the details:</p>
+    <table>
+        <tr>
+            <th>Date of Complaint</th>
+            <td>{{ entry.date_of_complaint }}</td>
+        </tr>
+        <tr>
+            <th>Issue Raised by Customer</th>
+            <td>{{ entry.issue_raised_by_customer }}</td>
+        </tr>
+        <tr>
+            <th>Complaint Raised by</th>
+            <td>{{ entry.complaint_raised_by }}</td>
+        </tr>
+        <tr>
+            <th>Complaint Raised Name</th>
+            <td>{{ entry.complaint_raised_name }}</td>
+        </tr>
+        <tr>
+            <th>Device Model</th>
+            <td>{{ entry.device_model }}</td>
+        </tr>
+        <tr>
+            <th>Device PSN</th>
+            <td>{{ entry.device_psn }}</td>
+        </tr>
+        <tr>
+            <th>VIN Number</th>
+            <td>{{ entry.vin_number }}</td>
+        </tr>
+        <tr>
+            <th>Issue Identified</th>
+            <td>{{ entry.issue_identified }}</td>
+        </tr>
+        <tr>
+            <th>Issue Analysis</th>
+            <td>{{ entry.issue_analysis }}</td>
+        </tr>
+        <tr>
+            <th>Engineer Recommendation</th>
+            <td>{{ entry.engineer_recommendation }}</td>
+        </tr>
+    </table>
+    <p>
+        <a href="http://127.0.0.1:8000/request_details/{{ entry.id }}/" class="button">View All Details</a>
+    </p>
+    <p>
+        <a href="http://127.0.0.1:8000/approve_hod_request/{{ entry.id }}/" class="button button-approve">Approve</a>
+        <a href="http://127.0.0.1:8000/reject_hod_request/{{ entry.id }}/" class="button button-reject">Reject</a>
+    </p>
+</body>
+</html>

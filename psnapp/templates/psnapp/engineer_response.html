@@ -1,0 +1,108 @@
+<!-- filepath: psnapp/templates/psnapp/engineer_response.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Response Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 15px; /* Adjust padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px; /* Adjust max-width */
+            max-height: 80vh; /* Set max-height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            position: relative;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px; /* Adjust margin-bottom */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px; /* Adjust margin to decrease spacing */
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], textarea, select {
+            padding: 8px; /* Adjust padding to decrease size */
+            margin-bottom: 10px; /* Adjust margin to decrease spacing */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px; /* Adjust padding */
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px; /* Adjust font-size */
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .messages {
+            margin-bottom: 10px; /* Adjust margin-bottom */
+        }
+        .messages .success {
+            color: green;
+        }
+        .logo {
+            margin-bottom: 15px; /* Adjust margin-bottom */
+            text-align: center;
+        }
+        .logo img {
+            width: 150px; /* Adjust width */
+        }
+        .download-logo {
+            display: block;
+            margin: 15px auto; /* Adjust margin */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <div class="logo">
+        <img src="{% static 'psnapp/company_logo.png' %}" alt="Company Logo">
+    </div>
+    <div class="container">
+        <h2>Engineer Response Form</h2>
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>

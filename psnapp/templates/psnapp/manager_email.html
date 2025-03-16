@@ -1,0 +1,25 @@
+<html>
+<body>
+    <h3>A new FIR request {{ entry.unique_number }} has been submitted. Please review the details below:</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr style="background-color: navy; color: white;">
+            <th>PSN</th>
+            <th>Engineer Name</th>
+            <th>Issue</th>
+            <th>Action</th>
+            <th>Unique Number</th>
+        </tr>
+        <tr>
+            <td>{{ entry.psn }}</td>
+            <td>{{ entry.engineer_name }}</td>
+            <td>{{ entry.issue }}</td>
+            <td>{{ entry.action }}</td>
+            <td>{{ entry.unique_number }}</td>
+        </tr>
+    </table>
+    <p style="text-align: center;">
+        <a href="http://127.0.0.1:8000/approve/{{ entry.id }}/" style="background-color: green; color: white; padding: 10px 20px; text-decoration: none; margin-right: 10px;">Approve</a>
+        <a href="http://127.0.0.1:8000/reject/{{ entry.id }}/" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none;">Reject</a>
+    </p>
+</body>
+</html>

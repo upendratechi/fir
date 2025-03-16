@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSN Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            position: relative;
+        }
+        .download-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 2px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], textarea, select {
+            padding: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            padding: 8px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .messages {
+            margin-bottom: 10px;
+        }
+        .messages .success {
+            color: green;
+        }
+        .logo {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .logo img {
+            width: 120px;
+        }
+        .download-logo {
+            display: block;
+            margin: 10px auto;
+            cursor: pointer;
+        }
+        .conditional-fields {
+            display: none;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var messages = document.querySelector('.messages');
+                if (messages) {
+                    messages.style.display = 'none';
+                }
+            }, 5000); // 5000 milliseconds = 5 seconds
+
+            var actionField = document.querySelector('select[name="action"]');
+            var returnableFields = document.querySelector('.returnable-fields');
+            var nonReturnableFields = document.querySelector('.non-returnable-fields');
+
+            function toggleFields() {
+                if (actionField.value === 'Returnable') {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'none';
+                } else if (actionField.value === 'Non-Returnable') {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'block';
+                } else {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'none';
+                }
+            }
+
+            actionField.addEventListener('change', toggleFields);
+            toggleFields(); // Initial call to set the correct fields on page load
+        });
+    </script>
+</head>
+<body>
+    {% load static %}
+    <div class="logo">
+        <img src="{% static 'psnapp/company_logo.png' %}" alt="Company Logo">
+    </div>
+    <div class="container">
+        <a href="{% url 'download_data' %}" class="download-icon" title="Download Data">
+            <i class="fas fa-download"></i>
+        </a>
+        <h2>PSN Form</h2>
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="conditional-fields non-returnable-fields">
+                <!-- Add fields specific to Non-Returnable action here -->
+                <label for="repaired">Repaired</label>
+                <input type="text" id="repaired" name="repaired">
+                <label for="shipped_date">Shipped Date (dd-mm-yyyy)</label>
+                <input type="text" id="shipped_date" name="shipped_date">
+                <label for="grn_no">GRN No</label>
+                <input type="text" id="grn_no" name="grn_no">
+                <label for="reused_for_field">Reused for Field</label>
+                <input type="text" id="reused_for_field" name="reused_for_field">
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>

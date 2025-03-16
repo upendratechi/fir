@@ -1,0 +1,20 @@
+<!-- psnapp/templates/psnapp/psn_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSN Form</title>
+</head>
+<body>
+    <h2>PSN Form</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="{% url 'home' %}">Go Back to Home Page</a>
+</body>
+</html>

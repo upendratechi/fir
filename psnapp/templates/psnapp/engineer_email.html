@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FIR Request Approved - Action Required</title>
+</head>
+<body>
+    <h3>New FIR request {{ entry.unique_number }} has been approved by your manager. Kindly please provide the additional details.</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr style="background-color: navy; color: white;">
+            <th>PSN</th>
+            <th>Engineer Name</th>
+            <th>Issue</th>
+            <th>Action</th>
+            <th>Unique Number</th>
+        </tr>
+        <tr>
+            <td>{{ entry.psn }}</td>
+            <td>{{ entry.engineer_name }}</td>
+            <td>{{ entry.issue }}</td>
+            <td>{{ entry.action }}</td>
+            <td>{{ entry.unique_number }}</td>
+        </tr>
+    </table>
+    <p>Click below to fill out the form:</p>
+    <p><a href="{{ form_url }}" style="background-color: blue; color: white; padding: 10px 20px; text-decoration: none;">Form</a></p>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Request Details</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Request Details</h2>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Date of complaint</th>
+                    <td>{{ entry.date_of_complaint }}</td>
+                </tr>
+                <tr>
+                    <th>Issue raised by customer</th>
+                    <td>{{ entry.customer_raised_issue }}</td>
+                </tr>
+                <tr>
+                    <th>Complaint Raised by</th>
+                    <td>{{ entry.complaint_raised_by }}</td>
+                </tr>
+  
+
+                <tr>
+                    <th>Complaint raised name</th>
+                    <td>{{ entry.complaint_raised_name }}</td>
+                </tr>
+  
+                <tr>
+                    <th>Contact Number</th>
+                    <td>{{ entry.contact_number }}</td>
+                </tr>
+                <tr>
+                    <th>Complaint Raised Through</th>
+                    <td>{{ entry.customer_raised_issue }}</td>
+                </tr>
+                <tr>
+                    <th>Service Engineer Name</th>
+                    <td>{{ entry.service_engineer_name }}</td>
+                </tr>
+                <tr>
+                    <th>Device Model</th>
+                    <td>{{ entry.device_model }}</td>
+                </tr>
+                <tr>
+                    <th>Device PSN</th>
+                    <td>{{ entry.device_PSN }}</td>
+                </tr>
+                <tr>
+                    <th>VIN Number</th>
+                    <td>{{ entry.VIN_number }}</td>
+                </tr>
+                <tr>
+                    <th>Firmware</th>
+                    <td>{{ entry.firmware }}</td>
+                </tr>
+                <tr>
+                    <th>Configuration</th>
+                    <td>{{ entry.configuration }}</td>
+                </tr>
+                <tr>
+                    <th>Device IMEI</th>
+                    <td>{{ entry.device_IMEI }}</td>
+                </tr>
+                <tr>
+                    <th>Device ICCID</th>
+                    <td>{{ entry.device_ICCID }}</td>
+                </tr>
+                <tr>
+                    <th>Date of Sale of Device</th>
+                    <td>{{ entry.date_of_sale_of_device }}</td>
+                </tr>
+                <tr>
+                    <th>Telco Status</th>
+                    <td>{{ entry.telco_status }}</td>
+                </tr>
+                <tr>
+                    <th>Active Profile</th>
+                    <td>{{ entry.active_profile }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Sale Date</th>
+                    <td>{{ entry.vehicle_sale_date }}</td>
+                </tr>
+                <tr>
+                    <th>S Trigger Date</th>
+                    <td>{{ entry.s_trigger_date }}</td>
+                </tr>
+                <tr>
+                    <th>C Trigger Date</th>
+                    <td>{{ entry.c_trigger_date }}</td>
+                </tr>
+                <tr>
+                    <th>Commercial Expiry Date</th>
+                    <td>{{ entry.commercial_expiry_date }}</td>
+                </tr>
+                <tr>
+                    <th>First Communication on Darby</th>
+                    <td>{{ entry.first_communication_in_darby }}</td>
+                </tr>
+                <tr>
+                    <th>Last Communication on Darby</th>
+                    <td>{{ entry.last_communication_in_darby }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Support Date</th>
+                    <td>{{ entry.vehicle_support_date }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Type</th>
+                    <td>{{ entry.vehicle_type }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Running Location</th>
+                    <td>{{ entry.vehicle_running_location }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Run</th>
+                    <td>{{ entry.vehicle_run }}</td>
+                </tr>
+                <tr>
+                    <th>Kilometers/Hours</th>
+                    <td>{{ entry.kilometers_hours }}</td>
+                </tr>
+                <tr>
+                    <th>Main Battery Voltage</th>
+                    <td>{{ entry.main_battery_voltage }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Identified</th>
+                    <td>{{ entry.issue_identified }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Analysis</th>
+                    <td>{{ entry.issue_analysis }}</td>
+                </tr>
+                <tr>
+                    <th>External Modification</th>
+                    <td>{{ entry.external_modification }}</td>
+                </tr>
+                <tr>
+                    <th>Engineer Recommendation</th>
+                    <td>{{ entry.engineer_recommendation }}</td>
+                </tr>
+                <tr>
+                    <th>Resolved or Not</th>
+                    <td>{{ entry.resolved_or_not }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Description</th>
+                    <td>{{ entry.issue_description }}</td>
+                </tr>
+                <tr>
+                    <th>Engineer Email</th>
+                    <td>{{ entry.engineer_email }}</td>
+                </tr>
+                <tr>
+                    <th>Manager Remarks</th>
+                    <td>{{ entry.manager_remarks }}</td>
+                </tr>
+                <tr>
+                    <th>Manager Email</th>
+                    <td>{{ entry.manager_email }}</td>
+                </tr>
+                <tr>
+                    <th>HOD Remarks</th>
+                    <td>{{ entry.hod_remarks }}</td>
+                </tr>
+                <tr>
+                    <th>HOD Approval Status</th>
+                    <td>{{ entry.hod_approval_status }}</td>
+                </tr>
+                <tr>
+                    <th>Device to be Sent</th>
+                    <td>{{ entry.device_to_be_sent }}</td>
+                </tr>
+                <tr>
+                    <th>Call Status</th>
+                    <td>{{ entry.call_status }}</td>
+                </tr>
+                <tr>
+                    <th>Final Action Taken</th>
+                    <td>{{ entry.final_action_taken }}</td>
+                </tr>
+                <tr>
+                    <th>Final Call Status</th>
+                    <td>{{ entry.final_call_status }}</td>
+                </tr>
+                <tr>
+                    <th>Date of Closure</th>
+                    <td>{{ entry.date_of_closure }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

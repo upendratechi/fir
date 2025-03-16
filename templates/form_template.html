@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSN Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+        }
+        .download-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .messages {
+            margin-bottom: 10px;
+        }
+        .messages .success {
+            color: green;
+        }
+        .logo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo img {
+            width: 120px;
+        }
+        .download-logo {
+            display: block;
+            margin: 10px auto;
+            cursor: pointer;
+        }
+        .conditional-fields {
+            display: none;
+        }
+        textarea {
+            resize: vertical; /* Allow vertical resizing */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var messages = document.querySelector('.messages');
+                if (messages) {
+                    messages.style.display = 'none';
+                }
+            }, 5000); // 5000 milliseconds = 5 seconds
+
+            var actionField = document.querySelector('select[name="action"]');
+            var returnableFields = document.querySelector('.returnable-fields');
+            var nonReturnableFields = document.querySelector('.non-returnable-fields');
+
+            function toggleFields() {
+                if (actionField.value === 'Returnable') {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'none';
+                } else if (actionField.value === 'Non-Returnable') {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'block';
+                } else {
+                    returnableFields.style.display = 'none';
+                    nonReturnableFields.style.display = 'none';
+                }
+            }
+
+            actionField.addEventListener('change', toggleFields);
+            toggleFields(); // Initial call to set the correct fields on page load
+        });
+    </script>
+</head>
+<body>
+    {% load static %}
+    {% load custom_filters %}
+    <div class="logo text-center mb-4">
+        <img src="{% static 'psnapp/company_logo.png' %}" alt="Company Logo" width="120">
+    </div>
+    <div class="container">
+        <h2 class="text-center mb-4">FIR Form -2</h2>
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post" class="form-horizontal">
+            {% csrf_token %}
+            <div class="form-row">
+                {% for field in form %}
+                    {% if field.name|not_in:"issue,vehicle_running_location,device_sent_to,manager_remarks,hod_remarks" %}
+                        <div class="form-group col-md-6">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.device_sent_to.label_tag }}
+                    {{ form.device_sent_to }}
+                    {% if form.device_sent_to.help_text %}
+                        <small class="form-text text-muted">{{ form.device_sent_to.help_text }}</small>
+                    {% endif %}
+                    {% for error in form.device_sent_to.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.issue.label_tag }}
+                    {{ form.issue }}
+                    {% if form.issue.help_text %}
+                        <small class="form-text text-muted">{{ form.issue.help_text }}</small>
+                    {% endif %}
+                    {% for error in form.issue.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.vehicle_running_location.label_tag }}
+                    {{ form.vehicle_running_location }}
+                    {% if form.vehicle_running_location.help_text %}
+                        <small class="form-text text-muted">{{ form.vehicle_running_location.help_text }}</small>
+                    {% endif %}
+                    {% for error in form.vehicle_running_location.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.manager_remarks.label_tag }}
+                    {{ form.manager_remarks }}
+                    {% if form.manager_remarks.help_text %}
+                        <small class="form-text text-muted">{{ form.manager_remarks.help_text }}</small>
+                    {% endif %}
+                    {% for error in form.manager_remarks.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.hod_remarks.label_tag }}
+                    {{ form.hod_remarks }}
+                    {% if form.hod_remarks.help_text %}
+                        <small class="form-text text-muted">{{ form.hod_remarks.help_text }}</small>
+                    {% endif %}
+                    {% for error in form.hod_remarks.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="conditional-fields non-returnable-fields">
+                <!-- Add fields specific to Non-Returnable action here -->
+                <div class="form-group col-md-6">
+                    <label for="repaired">Repaired</label>
+                    <input type="text" id="repaired" name="repaired" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="shipped_date">Shipped Date (dd-mm-yyyy)</label>
+                    <input type="text" id="shipped_date" name="shipped_date" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="grn_no">GRN No</label>
+                    <input type="text" id="grn_no" name="grn_no" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="reused_for_field">Reused for Field</label>
+                    <input type="text" id="reused_for_field" name="reused_for_field" class="form-control">
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock %}

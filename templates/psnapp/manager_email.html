@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New FIR Entry Submitted</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .btn-custom {
+            margin-right: 10px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: flex-start; /* Aligns buttons slightly left from the center */
+            gap: 20px; /* Adds space between the buttons */
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto; /* This helps center the group while keeping them slightly left */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>New FIR Entry Submitted- Request No : {{ entry.unique_id }}</h2>
+        <p>New FIR entry has been submitted. Here are the details:</p>
+        <table border="1" cellpadding="5" cellspacing="0" class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Date of Complaint</th>
+                    <td>{{ entry.date_of_complaint }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Raised by Customer</th>
+                    <td>{{ entry.customer_raised_issue }}</td>
+                </tr>
+                <tr>
+                    <th>Complaint Raised by</th>
+                    <td>{{ entry.complaint_raised_by }}</td>
+                </tr>
+                <tr>
+                    <th>Complaint Raised Name</th>
+                    <td>{{ entry.complaint_raised_name }}</td>
+                </tr>
+                <tr>
+                    <th>Device Model</th>
+                    <td>{{ entry.device_model }}</td>
+                </tr>
+                <tr>
+                    <th>Device PSN</th>
+                    <td>{{ entry.device_PSN }}</td>
+                </tr>
+                <tr>
+                    <th>VIN Number</th>
+                    <td>{{ entry.VIN_number }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Identified</th>
+                    <td>{{ entry.issue_identified }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Analysis</th>
+                    <td>{{ entry.issue_analysis }}</td>
+                </tr>
+                <tr>
+                    <th>Engineer Recommendation</th>
+                    <td>{{ entry.engineer_recommendation }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btn-container">
+            <a href="{{ view_details_url }}" class="btn btn-info btn-custom" style="background-color: blue; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px;">
+                <i class="fas fa-eye"></i> View All Details
+            </a>
+        </div>
+
+        <!-- Button group for Approve and Reject -->
+        <div class="button-group">
+            <a href="{{ approve_url }}" style="background-color: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px;" class="btn btn-success btn-custom">
+                <i class="fas fa-check"></i> Approve
+            </a>
+            <a href="{{ reject_url }}" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px;" class="btn btn-danger btn-custom">
+                <i class="fas fa-times"></i> Reject
+            </a>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
