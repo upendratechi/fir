@@ -1,147 +1,227 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Request Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Response Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; 
+        }
+        .container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px; /* Adjust max-width for 4 columns */
+            overflow-y: auto;
+            position: relative;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .messages {
+            margin-bottom: 10px;
+        }
+        .messages .success {
+            color: green;
+        }
+        .logo {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .logo img {
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Request Details</h2>
-    <table>
-        <tr>
-            <th>Date of Complaint</th>
-            <td>{{ entry.date_of_complaint }}</td>
-        </tr>
-        <tr>
-            <th>Issue Raised by Customer</th>
-            <td>{{ entry.issue_raised_by_customer }}</td>
-        </tr>
-        <tr>
-            <th>Complaint Raised by</th>
-            <td>{{ entry.complaint_raised_by }}</td>
-        </tr>
-        <tr>
-            <th>Complaint Raised Name</th>
-            <td>{{ entry.complaint_raised_name }}</td>
-        </tr>
-        <tr>
-            <th>Contact Number</th>
-            <td>{{ entry.contact_number }}</td>
-        </tr>
-        <tr>
-            <th>Complaint Raised Through</th>
-            <td>{{ entry.complaint_raised_through }}</td>
-        </tr>
-        <tr>
-            <th>Service Engineer Name</th>
-            <td>{{ entry.service_engineer_name }}</td>
-        </tr>
-        <tr>
-            <th>Device Model</th>
-            <td>{{ entry.device_model }}</td>
-        </tr>
-        <tr>
-            <th>Device PSN</th>
-            <td>{{ entry.device_psn }}</td>
-        </tr>
-        <tr>
-            <th>VIN Number</th>
-            <td>{{ entry.vin_number }}</td>
-        </tr>
-        <tr>
-            <th>Firmware</th>
-            <td>{{ entry.firmware }}</td>
-        </tr>
-        <tr>
-            <th>Configuration</th>
-            <td>{{ entry.configuration }}</td>
-        </tr>
-        <tr>
-            <th>Device IMEI</th>
-            <td>{{ entry.device_imei }}</td>
-        </tr>
-        <tr>
-            <th>Device ICCID</th>
-            <td>{{ entry.device_iccid }}</td>
-        </tr>
-        <tr>
-            <th>Date of Sale of Device</th>
-            <td>{{ entry.date_of_sale_of_device }}</td>
-        </tr>
-        <tr>
-            <th>Telco Status</th>
-            <td>{{ entry.telco_status }}</td>
-        </tr>
-        <tr>
-            <th>Active Profile</th>
-            <td>{{ entry.active_profile }}</td>
-        </tr>
-        <tr>
-            <th>S Trigger Date</th>
-            <td>{{ entry.s_trigger_date }}</td>
-        </tr>
-        <tr>
-            <th>C Trigger Date</th>
-            <td>{{ entry.c_trigger_date }}</td>
-        </tr>
-        <tr>
-            <th>Commercial Expiry Date</th>
-            <td>{{ entry.commercial_expiry_date }}</td>
-        </tr>
-        <tr>
-            <th>First Communication on Darby</th>
-            <td>{{ entry.first_communication_on_darby }}</td>
-        </tr>
-        <tr>
-            <th>Last Communication on Darby</th>
-            <td>{{ entry.last_communication_on_darby }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle Support Date</th>
-            <td>{{ entry.vehicle_support_date }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle Sale Date</th>
-            <td>{{ entry.vehicle_sale_date }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle Type</th>
-            <td>{{ entry.vehicle_type }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle Running Location</th>
-            <td>{{ entry.vehicle_running_location }}</td>
-        </tr>
-        <tr>
-            <th>Kilometers Hours</th>
-            <td>{{ entry.kilometers_hours }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle Usage</th>
-            <td>{{ entry.vehicle_usage }}</td>
-        </tr>
-        <tr>
-            <th>Main Battery Voltage</th>
-            <td>{{ entry.main_battery_voltage }}</td>
-        </tr>
-        <tr>
-            <th>Issue Identified</th>
-            <td>{{ entry.issue_identified }}</td>
-        </tr>
-        <tr>
-            <th>Issue Analysis</th>
-            <td>{{ entry.issue_analysis }}</td>
-        </tr>
-        <tr>
-            <th>External Modification</th>
-            <td>{{ entry.external_modification }}</td>
-        </tr>
-        <tr>
-            <th>Issue Description</th>
-            <td>{{ entry.issue_description }}</td>
-        </tr>
-        <tr>
-            <th>Engineer Recommendation</th>
-            <td>{{ entry.engineer_recommendation }}</td>
-        </tr>
-    </table>
+    {% load static %}
+    <div class="logo">
+        <img src="{% static 'psnapp/company_logo.png' %}" alt="Company Logo">
+    </div>
+    <div class="container">
+        <h2>Engineer Response Form</h2>
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>Date of Complaint</th>
+                    <td>{{ entry.date_of_complaint|date:"F j, Y, g:i a" }}</td>
+                    <th>Centralised ID</th>
+                    <td>{{ entry.centralised_id }}</td>
+                </tr>
+                <tr>
+                    <th>Unique ID</th>
+                    <td>{{ entry.unique_id }}</td>
+                    <th>Customer Raised Issue</th>
+                    <td>{{ entry.complaint_raised_name }}</td>
+                </tr>
+                <tr>
+                    <th>Complaint Raised By</th>
+                    <td>{{ entry.complaint_raised_by }}</td>
+                    <th>Complaint Raised Name</th>
+                    <td>{{ entry.complaint_raised_name }}</td>
+                </tr>
+                <tr>
+                    <th>Contact Number</th>
+                    <td>{{ entry.contact_number }}</td>
+                    <th>Complaint Raised Through</th>
+                    <td>{{ entry.complaint_raised_through }}</td>
+                </tr>
+                <tr>
+                    <th>Service Engineer Name</th>
+                    <td>{{ entry.service_engineer_name }}</td>
+                    <th>Device Model</th>
+                    <td>{{ entry.device_model }}</td>
+                </tr>
+                <tr>
+                    <th>Device PSN</th>
+                    <td>{{ entry.device_PSN }}</td>
+                    <th>VIN Number</th>
+                    <td>{{ entry.VIN_number }}</td>
+                </tr>
+                <tr>
+                    <th>Firmware</th>
+                    <td>{{ entry.firmware }}</td>
+                    <th>Configuration</th>
+                    <td>{{ entry.configuration }}</td>
+                </tr>
+                <tr>
+                    <th>Device IMEI</th>
+                    <td>{{ entry.device_IMEI }}</td>
+                    <th>Device ICCID</th>
+                    <td>{{ entry.device_ICCID }}</td>
+                </tr>
+                <tr>
+                    <th>Date of Sale of Device</th>
+                    <td>{{ entry.date_of_sale_of_device|date:"F j, Y" }}</td>
+                    <th>Telco Status</th>
+                    <td>{{ entry.telco_status }}</td>
+                </tr>
+                <tr>
+                    <th>Active Profile</th>
+                    <td>{{ entry.active_profile }}</td>
+                    <th>Vehicle Sale Date</th>
+                    <td>{{ entry.vehicle_sale_date|date:"F j, Y" }}</td>
+                </tr>
+                <tr>
+                    <th>S Trigger Date</th>
+                    <td>{{ entry.s_trigger_date|date:"F j, Y, g:i a" }}</td>
+                    <th>C Trigger Date</th>
+                    <td>{{ entry.c_trigger_date|date:"F j, Y, g:i a" }}</td>
+                </tr>
+                <tr>
+                    <th>Commercial Expiry Date</th>
+                    <td>{{ entry.commercial_expiry_date|date:"F j, Y" }}</td>
+                    <th>First Communication on Darby</th>
+                    <td>{{ entry.first_communication_in_darby|date:"F j, Y, g:i a" }}</td>
+                </tr>
+                <tr>
+                    <th>Last Communication on Darby</th>
+                    <td>{{ entry.last_communication_in_darby|date:"F j, Y, g:i a" }}</td>
+                    <th>Vehicle Support Date</th>
+                    <td>{{ entry.vehicle_support_date|date:"F j, Y, g:i a" }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Type</th>
+                    <td>{{ entry.vehicle_type }}</td>
+                    <th>Vehicle Running Location</th>
+                    <td>{{ entry.vehicle_running_location }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Run</th>
+                    <td>{{ entry.vehicle_run }}</td>
+                    <th>Kilometers/Hours</th>
+                    <td>{{ entry.kilometers_hours }}</td>
+                </tr>
+                <tr>
+                    <th>Main Battery Voltage</th>
+                    <td>{{ entry.main_battery_voltage }}</td>
+                    <th>Issue Identified</th>
+                    <td>{{ entry.issue_identified }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Analysis</th>
+                    <td>{{ entry.issue_analysis }}</td>
+                    <th>External Modification</th>
+                    <td>{{ entry.external_modification }}</td>
+                </tr>
+                <tr>
+                    <th>Engineer Recommendation</th>
+                    <td>{{ entry.engineer_recommendation }}</td>
+                    <th>Resolved or Not</th>
+                    <td>{{ entry.resolved_or_not }}</td>
+                </tr>
+                <tr>
+                    <th>Issue Description</th>
+                    <td>{{ entry.issue_description }}</td>
+                    <th>Engineer Email</th>
+                    <td>{{ entry.engineer_email }}</td>
+                </tr>
+                <tr>
+                    <th>Manager Remarks</th>
+                    <td>{{ entry.manager_remarks }}</td>
+                    <th>Manager Email</th>
+                    <td>{{ entry.manager_email }}</td>
+                </tr>
+                <tr>
+                    <th>HOD Remarks</th>
+                    <td>{{ entry.hod_remarks }}</td>
+                    <th>HOD Approval Status</th>
+                    <td>{{ entry.hod_approval_status }}</td>
+                </tr>
+                <tr>
+                    <th>Device to be Sent</th>
+                    <td>{{ entry.device_to_be_sent }}</td>
+                    <th>Call Status</th>
+                    <td>{{ entry.call_status }}</td>
+                </tr>
+                <tr>
+                    <th>Final Action Taken</th>
+                    <td>{{ entry.final_action_taken }}</td>
+                    <th>Final Call Status</th>
+                    <td>{{ entry.final_call_status }}</td>
+                </tr>
+                <tr>
+                    <th>Date of Closure</th>
+                    <td>{{ entry.date_of_closure|date:"F j, Y, g:i a" }}</td>
+                </tr>
+            </table>
+            <button type="submit">Save</button>
+        </form>
+    </div>
 </body>
 </html>

@@ -24,10 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Basic Django settings
 DEBUG = True  # Set to False in production for security
 ALLOWED_HOSTS = ['*']  # Change this in production to specific domain names
-
-# Secret key
+# filepath: psn_project/settings.py
 SECRET_KEY = 'XzFm9th2F_hEtuxTrIQif8di1BgcPVT7Ol-XJRJixU_grh8_-T7Q1UesXDlg_JNyb-M'
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # Ensure this line is included
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -78,7 +76,7 @@ WSGI_APPLICATION = 'psn_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # You can change this for production DB like PostgreSQL or MySQL
     }
 }
 
@@ -100,13 +98,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Localization settings
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
+# settings.py
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+# The directory where collectstatic will collect static files for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional locations the staticfiles app will traverse to find static files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
@@ -128,6 +132,10 @@ EMAIL_HOST_PASSWORD = 'wvdf wkoy whiz nvvv'  # Replace with your App Password
 DEFAULT_FROM_EMAIL = 'mulaupendrareddy@gmail.com'
 EMAIL_SUBJECT_PREFIX = '[FIR Request] '
 
+# For production, use environment variables for sensitive data like passwords
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Uncomment to use environment variable
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Uncomment to use environment variable
+
 # Site domain (can be used for generating absolute links in emails)
 SITE_DOMAIN = '127.0.0.1:8000'  # For local development, change for production
 
@@ -139,7 +147,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django_error.log',
+            'filename': BASE_DIR / 'django_error.log',  # Log file
         },
     },
     'loggers': {
@@ -150,6 +158,14 @@ LOGGING = {
         },
     },
 }
+
+# Caching settings (optional, for production setup)
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 
 # CSRF settings (for security)
 CSRF_COOKIE_SECURE = True  # Only set this to True if you use HTTPS
@@ -168,8 +184,8 @@ ADMIN_SITE_HEADER = 'PSN Project Admin'
 ADMIN_SITE_TITLE = 'PSN Admin'
 
 # Manager and HOD email addresses
-MANAGER_EMAIL = 'sales@danlawtech.com'
-HOD_EMAIL = 'sales@danlawtech.com'
+MANAGER_EMAIL = 'sales@danlawtech.com'  # Manager's email address
+HOD_EMAIL = 'sales@danlawtech.com'  # HOD's email address
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

@@ -14,6 +14,8 @@ from django.template.loader import render_to_string
 import logging
 from datetime import datetime
 import pytz
+import os
+from .generate_pdf import generate_device_repair_request_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +25,18 @@ def generate_unique_number():
         return last_entry.unique_number + 1
     else:
         return 10000  # Starting point if no entries exist
+
+def generate_centralised_id():
+    current_date = timezone.now()
+    year = current_date.strftime('%y')
+    month = current_date.strftime('%m')
+    last_entry = PSNEntry.objects.filter(centralised_id__startswith=f"DTIL{year}{month}").order_by('-centralised_id').first()
+    if last_entry and last_entry.centralised_id[8:].isdigit():
+        sequence_number = int(last_entry.centralised_id[8:]) + 1
+    else:
+        sequence_number = 1
+    centralised_id = f"DTIL{year}{month}{sequence_number:04d}"
+    return centralised_id
 
 def home(request):
     entries = PSNEntry.objects.all()
@@ -46,7 +60,7 @@ def entry_detail(request, id):
 
 def psn_form(request):
     if request.method == 'POST':
-        form = PSNEntryForm(request.POST)
+        form = PSNEntryForm(request.POST, request.FILES)
         if form.is_valid():
             entry = form.save(commit=False)
             entry.unique_id = generate_unique_id(entry)
@@ -85,6 +99,7 @@ def approve_request(request, id):
         return HttpResponse('This request has already been processed.', status=400)
 
     entry.manager_approval_status = 'Approved'
+    entry.manager_approval_datetime = timezone.now()
     entry.save()
 
     # Generate CSRF token
@@ -127,6 +142,7 @@ def reject_request(request, id):
         return HttpResponse('This request has already been processed.', status=400)
 
     entry.manager_approval_status = 'Rejected'
+    entry.manager_approval_datetime = timezone.now()
     entry.save()
 
     # Send email to the engineer
@@ -147,13 +163,59 @@ def approve_hod_request(request, id):
     if entry.hod_approval_status in ['Approved', 'Rejected']:
         return HttpResponse('This request has already been processed by the HOD.', status=400)
     entry.hod_approval_status = 'Approved'
+    entry.hod_approval_datetime = timezone.now()
+    entry.centralised_id = generate_centralised_id()
     entry.save()
-    engineer_email = entry.engineer_email
-    subject = 'FIR Request Approved by HOD - Action Required'
-    message = render_to_string('psnapp/engineer_email.html', {'entry': entry, 'csrf_token': get_token(request)})
-    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[entry.manager_email, settings.HOD_EMAIL, 'mupendramzvpsp@gmail.com', 'mulaupendrareddy@gmail.com'])
-    email.content_subtype = 'html'
+
+    # Prepare data for PDF
+    data = {
+        'device_model': entry.device_model,
+        'centralised_id': entry.centralised_id,
+        'engineer_requested_date': entry.engineer_requested_date.strftime('%d-%m-%Y'),
+        'details': {
+            'Service Request Number': entry.centralised_id,
+            'Date of communication failure': entry.last_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.last_communication_in_darby else 'N/A',
+            'Device Model': entry.device_model,
+            'Defective device PSN': entry.device_PSN,
+            'VIN Number': entry.VIN_number,
+            'Device IMEI': entry.device_IMEI,
+            'Device CCID': entry.device_ICCID,
+            'Date of Sale of Device': entry.date_of_sale_of_device.strftime('%d-%m-%Y') if entry.date_of_sale_of_device else 'N/A',
+            'S Trigger Date': entry.s_trigger_date.strftime('%d-%m-%Y') if entry.s_trigger_date else 'N/A',
+            'C Trigger Date': entry.c_trigger_date.strftime('%d-%m-%Y') if entry.c_trigger_date else 'N/A',
+            'Commercial Expiry date': entry.commercial_expiry_date.strftime('%d-%m-%Y') if entry.commercial_expiry_date else 'N/A',
+            'Active Profile (BSNL/Airtel/Dual)': entry.active_profile,
+            'Vehicle Type / Model': entry.vehicle_type,
+            'Failure Location Plant/ Field- Customer Address': entry.vehicle_running_location,
+            'Kilometers/Hours': entry.vehicle_run,
+            'Main Battery Voltage': entry.main_battery_voltage,
+            'Service Engineer Name': entry.service_engineer_name,
+            'Reason for Replacement/Repair': entry.engineer_recommendation,
+            'Darby Last communication date': entry.last_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.last_communication_in_darby else 'N/A',
+            'Device Replacement request Initiation date': entry.engineer_requested_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'Returnable / Non-Returnable': entry.engineer_recommendation,
+        },
+        'service_engineer_name': entry.service_engineer_name,
+        'manager_email': entry.manager_email,
+        'manager_approval_datetime': entry.manager_approval_datetime.strftime('%Y-%m-%d %H:%M:%S') if entry.manager_approval_datetime else 'N/A',
+        'hod_approval_datetime': entry.hod_approval_datetime.strftime('%Y-%m-%d %H:%M:%S') if entry.hod_approval_datetime else 'N/A',
+    }
+
+    # Set the PDF file path with the desired filename format
+    pdf_file_name = f"Device_{entry.engineer_recommendation}_{entry.centralised_id}.pdf"
+    pdf_file_path = os.path.join('media', pdf_file_name)
+    generate_device_repair_request_pdf(data, pdf_file_path)
+
+    # Send email with PDF attachment
+    email = EmailMessage(
+        'Device Repair Request',
+        'Please find the attached Device Repair Request.',
+        settings.DEFAULT_FROM_EMAIL,
+        [entry.engineer_email],
+    )
+    email.attach_file(pdf_file_path)
     email.send()
+
     return HttpResponse('Thanks for approval. Engineer will receive confirmation to fill the additional details.')
 
 def reject_hod_request(request, id):
@@ -161,13 +223,20 @@ def reject_hod_request(request, id):
     if entry.hod_approval_status in ['Approved', 'Rejected']:
         return HttpResponse('This request has already been processed by the HOD.', status=400)
     entry.hod_approval_status = 'Rejected'
+    entry.hod_approval_datetime = timezone.now()
     entry.save()
+    
     engineer_email = entry.engineer_email
+    manager_email = entry.manager_email
+    hod_email = settings.HOD_EMAIL
+
     subject = 'PSN Request Rejected by HOD'
     message = render_to_string('psnapp/engineer_rejection_email.html', {'entry': entry})
-    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email])
+    
+    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[manager_email, hod_email])
     email.content_subtype = 'html'
     email.send()
+    
     return HttpResponse('The request has been rejected by the HOD and the engineer has been notified.')
 
 def download_data(request):
@@ -181,70 +250,69 @@ def download_data(request):
     response['Content-Disposition'] = f'attachment; filename="FIR_ENTRIES_{formatted_datetime}.csv"'
 
     writer = csv.writer(response)
-    # Write the header row with all fields
+    # Write the header row with the specified fields
     writer.writerow([
-        'ID', 'Date of Complaint', 'Date of Sale of Device', 'Issue Raised by Customer', 'Vehicle Sale Date',
-        'Active Profile', 'C Trigger Date', 'Commercial Expiry Date', 'Complaint Raised by', 'Complaint Raised Name',
-        'Complaint Raised Through', 'Configuration', 'Contact Number', 'Device ICCID', 'Device IMEI', 'Device Model',
-        'Device PSN', 'Engineer Recommendation', 'External Modification', 'Firmware', 'First Communication in Darby',
-        'HOD Remarks', 'Issue Analysis', 'Issue Description', 'Issue Identified', 'Kilometers Hours',
-        'Last Communication on Darby', 'Main Battery Voltage', 'Manager Remarks', 'S Trigger Date',
-        'Service Engineer Name', 'Telco Status', 'Vehicle Running Location', 'Vehicle Support Date', 'Vehicle Type',
-        'VIN Number', 'Resolved or Not', 'Engineer Email', 'HOD Approval Status', 'Vehicle Run', 'Manager Email',
-        'Device to be Sent', 'Call Status', 'Final Action Taken', 'Final Call Status', 'Date of Closure',
-        'Manager Approval Status', 'Unique ID'
+        'Date of Complaint', 'Centralised ID', 'Unique ID', 'Customer Raised Issue', 'Complaint Raised By',
+        'Complaint Raised Name', 'Contact Number', 'Complaint Raised Through', 'Service Engineer Name',
+        'Device Model', 'Device PSN', 'VIN Number', 'Firmware', 'Configuration', 'Device IMEI', 'Device ICCID',
+        'Date of Sale of Device', 'Telco Status', 'Active Profile', 'Vehicle Sale Date', 'S Trigger Date',
+        'C Trigger Date', 'Commercial Expiry Date', 'First Communication in Darby', 'Last Communication in Darby',
+        'Vehicle Type', 'Vehicle Running Location', 'Vehicle Run', 'Kilometers/Hours', 'Main Battery Voltage',
+        'Vehicle Support Date', 'Issue Identified', 'External Modification', 'Issue Analysis', 'Resolved or Not',
+        'Issue Description', 'Engineer Recommendation', 'Engineer Email', 'Manager Remarks', 'Manager Email',
+        'Manager Approval Datetime', 'HOD Remarks', 'HOD Approval Status', 'HOD Approval Datetime', 'Device to be Sent',
+        'Upload File', 'Unique ID'
     ])
 
     entries = PSNEntry.objects.all()
     for entry in entries:
         writer.writerow([
-            entry.id, 
-            entry.date_of_complaint.strftime('%Y-%m-%d %H:%M:%S') if entry.date_of_complaint else 'N/A', 
-            entry.date_of_sale_of_device.strftime('%Y-%m-%d %H:%M:%S') if entry.date_of_sale_of_device else 'N/A', 
-
-            entry.vehicle_sale_date.strftime('%Y-%m-%d %H:%M:%S') if entry.vehicle_sale_date else 'N/A',
-            entry.active_profile, 
-            entry.c_trigger_date.strftime('%Y-%m-%d %H:%M:%S') if entry.c_trigger_date else 'N/A', 
-            entry.commercial_expiry_date.strftime('%Y-%m-%d %H:%M:%S') if entry.commercial_expiry_date else 'N/A', 
-            entry.complaint_raised_by, 
+            entry.date_of_complaint.strftime('%Y-%m-%d %H:%M:%S') if entry.date_of_complaint else 'N/A',
+            entry.centralised_id,
+            entry.unique_id,
             entry.complaint_raised_name,
-            entry.complaint_raised_through, 
-            entry.configuration, 
-            entry.contact_number, 
-            entry.device_ICCID, 
-            entry.device_IMEI, 
+            entry.complaint_raised_by,
+            entry.complaint_raised_name,
+            entry.contact_number,
+            entry.complaint_raised_through,
+            entry.service_engineer_name,
             entry.device_model,
-            entry.device_PSN, 
-            entry.engineer_recommendation, 
-            entry.external_modification, 
-            entry.firmware, 
-            entry.first_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.first_communication_in_darby else 'N/A',
-            entry.hod_remarks, 
-            entry.issue_analysis, 
-            entry.issue_description, 
-            entry.issue_identified, 
-            entry.kilometers_hours,
-            entry.last_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.last_communication_in_darby else 'N/A', 
-            entry.main_battery_voltage, 
-            entry.manager_remarks, 
+            entry.device_PSN,
+            entry.VIN_number,
+            entry.firmware,
+            entry.configuration,
+            entry.device_IMEI,
+            entry.device_ICCID,
+            entry.date_of_sale_of_device.strftime('%Y-%m-%d %H:%M:%S') if entry.date_of_sale_of_device else 'N/A',
+            entry.telco_status,
+            entry.active_profile,
+            entry.vehicle_sale_date.strftime('%Y-%m-%d %H:%M:%S') if entry.vehicle_sale_date else 'N/A',
             entry.s_trigger_date.strftime('%Y-%m-%d %H:%M:%S') if entry.s_trigger_date else 'N/A',
-            entry.service_engineer_name, 
-            entry.telco_status, 
-            entry.vehicle_running_location, 
-            entry.vehicle_support_date.strftime('%Y-%m-%d %H:%M:%S') if entry.vehicle_support_date else 'N/A', 
+            entry.c_trigger_date.strftime('%Y-%m-%d %H:%M:%S') if entry.c_trigger_date else 'N/A',
+            entry.commercial_expiry_date.strftime('%Y-%m-%d %H:%M:%S') if entry.commercial_expiry_date else 'N/A',
+            entry.first_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.first_communication_in_darby else 'N/A',
+            entry.last_communication_in_darby.strftime('%Y-%m-%d %H:%M:%S') if entry.last_communication_in_darby else 'N/A',
             entry.vehicle_type,
-            entry.VIN_number, 
-            entry.resolved_or_not, 
-            entry.engineer_email, 
-            entry.hod_approval_status, 
-            entry.vehicle_run, 
+            entry.vehicle_running_location,
+            entry.vehicle_run,
+            entry.kilometers_hours,
+            entry.main_battery_voltage,
+            entry.vehicle_support_date.strftime('%Y-%m-%d %H:%M:%S') if entry.vehicle_support_date else 'N/A',
+            entry.issue_identified,
+            entry.external_modification,
+            entry.issue_analysis,
+            entry.resolved_or_not,
+            entry.issue_description,
+            entry.engineer_recommendation,
+            entry.engineer_email,
+            entry.manager_remarks,
             entry.manager_email,
-            entry.device_to_be_sent, 
-            entry.call_status, 
-            entry.final_action_taken, 
-            entry.final_call_status, 
-            entry.date_of_closure.strftime('%Y-%m-%d %H:%M:%S') if entry.date_of_closure else 'N/A',
-            entry.manager_approval_status, 
+            entry.manager_approval_datetime.strftime('%Y-%m-%d %H:%M:%S') if entry.manager_approval_datetime else 'N/A',
+            entry.hod_remarks,
+            entry.hod_approval_status,
+            entry.hod_approval_datetime.strftime('%Y-%m-%d %H:%M:%S') if entry.hod_approval_datetime else 'N/A',
+            entry.device_to_be_sent,
+            entry.upload_file.url if entry.upload_file else 'N/A',
             entry.unique_id
         ])
 
@@ -315,7 +383,14 @@ def success(request):
 
 def request_details(request, id):
     entry = get_object_or_404(PSNEntry, id=id)
-    return render(request, 'psnapp/request_details.html', {'entry': entry})
+    if request.method == 'POST':
+        form = PSNEntryForm(request.POST, instance=entry)
+        if form.is_valid():
+            form.save()
+            return redirect('request_details', id=entry.id)
+    else:
+        form = PSNEntryForm(instance=entry)
+    return render(request, 'psnapp/request_details.html', {'entry': entry, 'form': form})
 
 def psn_entry_create(request):
     if request.method == 'POST':
@@ -354,3 +429,4 @@ def generate_unique_id(entry):
         sequence_number = 0
     unique_id = f"{service_engineer_initial}{year}{month}{sequence_number:04d}"
     return unique_id
+

@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.psn_form, name='psn_form'),
     path('success/', views.success, name='success'),
     path('thank_you/', views.thank_you, name='thank_you'),
-    path('download/', views.download_psn_entries, name='download_psn_entries'),
+
     path('approve_request/<int:id>/', views.approve_request, name='approve_request'),
     path('reject_request/<int:id>/', views.reject_request, name='reject_request'),
     path('approve_hod_request/<int:id>/', views.approve_hod_request, name='approve_hod_request'),

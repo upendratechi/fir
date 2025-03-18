@@ -23,7 +23,7 @@ class PSNEntry(models.Model):
         ('others', 'Others'),
     ], default='Select one')
     complaint_raised_name = models.CharField(max_length=100, default='')
-    contact_number = models.CharField(max_length=15, null=True, blank=True)
+    contact_number = models.CharField(max_length=10, null=True, blank=True)
     complaint_raised_through = models.CharField(max_length=20, choices=[
         ('--','--'),
         ('I-Alert', 'I-Alert'),
@@ -47,7 +47,7 @@ class PSNEntry(models.Model):
         ('DL548', 'DL548'),
         ('others', 'Others'),
     ], default='Select one')
-    device_PSN = models.IntegerField(null=True, blank=True)
+    device_PSN = models.CharField(max_length=10, null=True, blank=True)
     VIN_number = models.CharField(max_length=100, null=True, blank=True)
     firmware = models.CharField(max_length=100, null=True, blank=True)
     configuration = models.CharField(max_length=100, choices=[
@@ -57,7 +57,7 @@ class PSNEntry(models.Model):
         ('others', 'Others'),
     ], default='Select one')
     device_IMEI = models.BigIntegerField(blank=True, null=True)
-    device_ICCID = models.BigIntegerField(blank=True, null=True)
+    device_ICCID = models.CharField(max_length=20)  # Ensure this is a CharField
     date_of_sale_of_device = models.DateField(null=True, blank=True)
     telco_status = models.CharField(max_length=20, choices=[
         ('--','--'),
@@ -127,7 +127,7 @@ class PSNEntry(models.Model):
     EXTERNAL_MODIFICATION_CHOICES = [
         ('--','--'),
         ('Air Horn', 'Air Horn'),
-        ('Air Cabin', 'Air Cabin'),
+        ('Alternate Cabin', 'Aiternate Cabin'),
         ('Alt-Device', 'Alt-Device'),
         ('Device Modification', 'Device Modification'),
         ('Others', 'Others'),
@@ -159,12 +159,14 @@ class PSNEntry(models.Model):
         ('Pending', 'Pending'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
-    ], default='Select one')
+    ], default='Pending')
     manager_approval_status = models.CharField(max_length=20, choices=[
         ('Pending', 'Pending'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
     ], default='Pending')
+    manager_approval_datetime = models.DateTimeField(null=True, blank=True)
+    hod_approval_datetime = models.DateTimeField(null=True, blank=True)
     device_to_be_sent = models.CharField(max_length=20, choices=[
         ('--','--'),
         ('Goa', 'Goa'),
@@ -184,6 +186,9 @@ class PSNEntry(models.Model):
         ('Pending', 'Pending'),
     ], default='Select one')
     date_of_closure = models.DateTimeField(null=True, blank=True)
+    upload_file = models.FileField(upload_to='uploads/', null=True, blank=True)
+    centralised_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    engineer_requested_date = models.DateTimeField(auto_now_add=True)  # Automatically set the current datetime when created
 
     def __str__(self):
         return self.service_engineer_name if self.service_engineer_name else 'PSN Entry'

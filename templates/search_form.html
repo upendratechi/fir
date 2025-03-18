@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Search Ticket</h2>
+    <form method="get" action="{% url 'search_ticket' %}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="ticket_number" placeholder="Enter Ticket Number" required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    </form>
+
+    {% if entry %}
+    <h3>Update Ticket: {{ entry.unique_id }}</h3>
+    <form method="post" action="{% url 'update_ticket' entry.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                {{ form.call_status|as_crispy_field }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ form.final_action_taken|as_crispy_field }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ form.final_call_status|as_crispy_field }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ form.date_of_closure|as_crispy_field }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ form.upload_file|as_crispy_field }}
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Update</button>
+        </div>
+    </form>
+    {% endif %}
+</div>
+
+<!-- Add this script to handle the popup form -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.querySelector("form[action='{% url 'search_ticket' %}']");
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const ticketNumber = searchForm.querySelector('input[name="ticket_number"]').value;
+            fetch(`{% url 'search_ticket' %}?ticket_number=${ticketNumber}`)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const form = doc.querySelector("form[action^='{% url 'update_ticket' %}']");
+                    if (form) {
+                        document.body.appendChild(form);
+                        form.style.display = 'block';
+                    } else {
+                        alert('Ticket not found.');
+                    }
+                });
+        });
+    });
+</script>
+{% endblock %}

@@ -251,6 +251,10 @@
                         <div class="col-md-3 mb-3">
                             {{ form.date_of_closure|as_crispy_field }}
                         </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.upload_file|as_crispy_field }}
+                        </div>
+
                     </div>
                     <div id="success-message" class="alert alert-success" style="display: none;">
                         Your response is successfully submitted. Thanks for your patience.
@@ -286,7 +290,7 @@
 
             const vehicleRunningLocationInput = document.querySelector('input[name="vehicle_running_location"]');
             vehicleRunningLocationInput.addEventListener('input', function() {
-                this.value = this.value.toUpperCase().replace(/[^A-Z0-9!@#$%^&*()_+=-]/g, '');
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9!@#$%^&*()_+ =-]/g, '');
             });
 
             const resolvedOrNot = document.querySelector('select[name="resolved_or_not"]');

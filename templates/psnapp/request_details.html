@@ -2,203 +2,199 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Details</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            overflow-y: auto;
+            position: relative;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .grid-item {
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .grid-item:nth-child(odd) {
+            background-color: #0fa195;
+        }
+        .grid-item:nth-child(even) {
+            background-color: #aaa6d6;
+        }
+        .logo {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .logo img {
+            width: 150px;
+        }
+        .top-right-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Request Details</h2>
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <th>Date of complaint</th>
-                    <td>{{ entry.date_of_complaint }}</td>
-                </tr>
-                <tr>
-                    <th>Issue raised by customer</th>
-                    <td>{{ entry.customer_raised_issue }}</td>
-                </tr>
-                <tr>
-                    <th>Complaint Raised by</th>
-                    <td>{{ entry.complaint_raised_by }}</td>
-                </tr>
-  
-
-                <tr>
-                    <th>Complaint raised name</th>
-                    <td>{{ entry.complaint_raised_name }}</td>
-                </tr>
-  
-                <tr>
-                    <th>Contact Number</th>
-                    <td>{{ entry.contact_number }}</td>
-                </tr>
-                <tr>
-                    <th>Complaint Raised Through</th>
-                    <td>{{ entry.customer_raised_issue }}</td>
-                </tr>
-                <tr>
-                    <th>Service Engineer Name</th>
-                    <td>{{ entry.service_engineer_name }}</td>
-                </tr>
-                <tr>
-                    <th>Device Model</th>
-                    <td>{{ entry.device_model }}</td>
-                </tr>
-                <tr>
-                    <th>Device PSN</th>
-                    <td>{{ entry.device_PSN }}</td>
-                </tr>
-                <tr>
-                    <th>VIN Number</th>
-                    <td>{{ entry.VIN_number }}</td>
-                </tr>
-                <tr>
-                    <th>Firmware</th>
-                    <td>{{ entry.firmware }}</td>
-                </tr>
-                <tr>
-                    <th>Configuration</th>
-                    <td>{{ entry.configuration }}</td>
-                </tr>
-                <tr>
-                    <th>Device IMEI</th>
-                    <td>{{ entry.device_IMEI }}</td>
-                </tr>
-                <tr>
-                    <th>Device ICCID</th>
-                    <td>{{ entry.device_ICCID }}</td>
-                </tr>
-                <tr>
-                    <th>Date of Sale of Device</th>
-                    <td>{{ entry.date_of_sale_of_device }}</td>
-                </tr>
-                <tr>
-                    <th>Telco Status</th>
-                    <td>{{ entry.telco_status }}</td>
-                </tr>
-                <tr>
-                    <th>Active Profile</th>
-                    <td>{{ entry.active_profile }}</td>
-                </tr>
-                <tr>
-                    <th>Vehicle Sale Date</th>
-                    <td>{{ entry.vehicle_sale_date }}</td>
-                </tr>
-                <tr>
-                    <th>S Trigger Date</th>
-                    <td>{{ entry.s_trigger_date }}</td>
-                </tr>
-                <tr>
-                    <th>C Trigger Date</th>
-                    <td>{{ entry.c_trigger_date }}</td>
-                </tr>
-                <tr>
-                    <th>Commercial Expiry Date</th>
-                    <td>{{ entry.commercial_expiry_date }}</td>
-                </tr>
-                <tr>
-                    <th>First Communication on Darby</th>
-                    <td>{{ entry.first_communication_in_darby }}</td>
-                </tr>
-                <tr>
-                    <th>Last Communication on Darby</th>
-                    <td>{{ entry.last_communication_in_darby }}</td>
-                </tr>
-                <tr>
-                    <th>Vehicle Support Date</th>
-                    <td>{{ entry.vehicle_support_date }}</td>
-                </tr>
-                <tr>
-                    <th>Vehicle Type</th>
-                    <td>{{ entry.vehicle_type }}</td>
-                </tr>
-                <tr>
-                    <th>Vehicle Running Location</th>
-                    <td>{{ entry.vehicle_running_location }}</td>
-                </tr>
-                <tr>
-                    <th>Vehicle Run</th>
-                    <td>{{ entry.vehicle_run }}</td>
-                </tr>
-                <tr>
-                    <th>Kilometers/Hours</th>
-                    <td>{{ entry.kilometers_hours }}</td>
-                </tr>
-                <tr>
-                    <th>Main Battery Voltage</th>
-                    <td>{{ entry.main_battery_voltage }}</td>
-                </tr>
-                <tr>
-                    <th>Issue Identified</th>
-                    <td>{{ entry.issue_identified }}</td>
-                </tr>
-                <tr>
-                    <th>Issue Analysis</th>
-                    <td>{{ entry.issue_analysis }}</td>
-                </tr>
-                <tr>
-                    <th>External Modification</th>
-                    <td>{{ entry.external_modification }}</td>
-                </tr>
-                <tr>
-                    <th>Engineer Recommendation</th>
-                    <td>{{ entry.engineer_recommendation }}</td>
-                </tr>
-                <tr>
-                    <th>Resolved or Not</th>
-                    <td>{{ entry.resolved_or_not }}</td>
-                </tr>
-                <tr>
-                    <th>Issue Description</th>
-                    <td>{{ entry.issue_description }}</td>
-                </tr>
-                <tr>
-                    <th>Engineer Email</th>
-                    <td>{{ entry.engineer_email }}</td>
-                </tr>
-                <tr>
-                    <th>Manager Remarks</th>
-                    <td>{{ entry.manager_remarks }}</td>
-                </tr>
-                <tr>
-                    <th>Manager Email</th>
-                    <td>{{ entry.manager_email }}</td>
-                </tr>
-                <tr>
-                    <th>HOD Remarks</th>
-                    <td>{{ entry.hod_remarks }}</td>
-                </tr>
-                <tr>
-                    <th>HOD Approval Status</th>
-                    <td>{{ entry.hod_approval_status }}</td>
-                </tr>
-                <tr>
-                    <th>Device to be Sent</th>
-                    <td>{{ entry.device_to_be_sent }}</td>
-                </tr>
-                <tr>
-                    <th>Call Status</th>
-                    <td>{{ entry.call_status }}</td>
-                </tr>
-                <tr>
-                    <th>Final Action Taken</th>
-                    <td>{{ entry.final_action_taken }}</td>
-                </tr>
-                <tr>
-                    <th>Final Call Status</th>
-                    <td>{{ entry.final_call_status }}</td>
-                </tr>
-                <tr>
-                    <th>Date of Closure</th>
-                    <td>{{ entry.date_of_closure }}</td>
-                </tr>
-            </tbody>
-        </table>
+    {% load static %}
+    <div class="logo">
+        <img src="{% static 'psnapp/company_logo.png' %}" alt="Company Logo">
     </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="container">
+        <i class="fas fa-ellipsis-v top-right-icon"></i>
+        <h2>Request Details-<b>{{ entry.unique_id }}</b></h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid-container">
+                <div class="grid-item">Date of Complaint</div>
+                <div class="grid-item"><input type="text" name="date_of_complaint" value="{{ entry.date_of_complaint|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">Centralised ID</div>
+                <div class="grid-item"><input type="text" name="centralised_id" value="{{ entry.centralised_id }}"></div>
+
+                <div class="grid-item">Unique ID</div>
+                <div class="grid-item"><input type="text" name="unique_id" value="{{ entry.unique_id }}"></div>
+                <div class="grid-item">Customer Raised Issue</div>
+                <div class="grid-item"><input type="text" name="complaint_raised_name" value="{{ entry.complaint_raised_name }}"></div>
+
+                <div class="grid-item">Complaint Raised By</div>
+                <div class="grid-item"><input type="text" name="complaint_raised_by" value="{{ entry.complaint_raised_by }}"></div>
+                <div class="grid-item">Complaint Raised Name</div>
+                <div class="grid-item"><input type="text" name="complaint_raised_name" value="{{ entry.complaint_raised_name }}"></div>
+
+                <div class="grid-item">Contact Number</div>
+                <div class="grid-item"><input type="text" name="contact_number" value="{{ entry.contact_number }}"></div>
+                <div class="grid-item">Complaint Raised Through</div>
+                <div class="grid-item"><input type="text" name="complaint_raised_through" value="{{ entry.complaint_raised_through }}"></div>
+
+                <div class="grid-item">Service Engineer Name</div>
+                <div class="grid-item"><input type="text" name="service_engineer_name" value="{{ entry.service_engineer_name }}"></div>
+                <div class="grid-item">Device Model</div>
+                <div class="grid-item"><input type="text" name="device_model" value="{{ entry.device_model }}"></div>
+
+                <div class="grid-item">Device PSN</div>
+                <div class="grid-item"><input type="text" name="device_PSN" value="{{ entry.device_PSN }}"></div>
+                <div class="grid-item">VIN Number</div>
+                <div class="grid-item"><input type="text" name="VIN_number" value="{{ entry.VIN_number }}"></div>
+
+                <div class="grid-item">Firmware</div>
+                <div class="grid-item"><input type="text" name="firmware" value="{{ entry.firmware }}"></div>
+                <div class="grid-item">Configuration</div>
+                <div class="grid-item"><input type="text" name="configuration" value="{{ entry.configuration }}"></div>
+
+                <div class="grid-item">Device IMEI</div>
+                <div class="grid-item"><input type="text" name="device_IMEI" value="{{ entry.device_IMEI }}"></div>
+                <div class="grid-item">Device ICCID</div>
+                <div class="grid-item"><input type="text" name="device_ICCID" value="{{ entry.device_ICCID }}"></div>
+
+                <div class="grid-item">Date of Sale of Device</div>
+                <div class="grid-item"><input type="text" name="date_of_sale_of_device" value="{{ entry.date_of_sale_of_device|date:'Y-m-d' }}"></div>
+                <div class="grid-item">Telco Status</div>
+                <div class="grid-item"><input type="text" name="telco_status" value="{{ entry.telco_status }}"></div>
+
+                <div class="grid-item">Active Profile</div>
+                <div class="grid-item"><input type="text" name="active_profile" value="{{ entry.active_profile }}"></div>
+                <div class="grid-item">Vehicle Sale Date</div>
+                <div class="grid-item"><input type="text" name="vehicle_sale_date" value="{{ entry.vehicle_sale_date|date:'Y-m-d' }}"></div>
+
+                <div class="grid-item">S Trigger Date</div>
+                <div class="grid-item"><input type="text" name="s_trigger_date" value="{{ entry.s_trigger_date|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">C Trigger Date</div>
+                <div class="grid-item"><input type="text" name="c_trigger_date" value="{{ entry.c_trigger_date|date:'Y-m-d H:i:s' }}"></div>
+
+                <div class="grid-item">Commercial Expiry Date</div>
+                <div class="grid-item"><input type="text" name="commercial_expiry_date" value="{{ entry.commercial_expiry_date|date:'Y-m-d' }}"></div>
+                <div class="grid-item">First Communication on Darby</div>
+                <div class="grid-item"><input type="text" name="first_communication_in_darby" value="{{ entry.first_communication_in_darby|date:'Y-m-d H:i:s' }}"></div>
+
+                <div class="grid-item">Last Communication on Darby</div>
+                <div class="grid-item"><input type="text" name="last_communication_in_darby" value="{{ entry.last_communication_in_darby|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">Vehicle Support Date</div>
+                <div class="grid-item"><input type="text" name="vehicle_support_date" value="{{ entry.vehicle_support_date|date:'Y-m-d H:i:s' }}"></div>
+
+                <div class="grid-item">Vehicle Type</div>
+                <div class="grid-item"><input type="text" name="vehicle_type" value="{{ entry.vehicle_type }}"></div>
+                <div class="grid-item">Vehicle Running Location</div>
+                <div class="grid-item"><input type="text" name="vehicle_running_location" value="{{ entry.vehicle_running_location }}"></div>
+
+                <div class="grid-item">Vehicle Run</div>
+                <div class="grid-item"><input type="text" name="vehicle_run" value="{{ entry.vehicle_run }}"></div>
+                <div class="grid-item">Kilometers/Hours</div>
+                <div class="grid-item"><input type="text" name="kilometers_hours" value="{{ entry.kilometers_hours }}"></div>
+
+                <div class="grid-item">Main Battery Voltage</div>
+                <div class="grid-item"><input type="text" name="main_battery_voltage" value="{{ entry.main_battery_voltage }}"></div>
+                <div class="grid-item">Issue Identified</div>
+                <div class="grid-item"><input type="text" name="issue_identified" value="{{ entry.issue_identified }}"></div>
+
+                <div class="grid-item">Issue Analysis</div>
+                <div class="grid-item"><input type="text" name="issue_analysis" value="{{ entry.issue_analysis }}"></div>
+                <div class="grid-item">External Modification</div>
+                <div class="grid-item"><input type="text" name="external_modification" value="{{ entry.external_modification }}"></div>
+
+                <div class="grid-item">Engineer Recommendation</div>
+                <div class="grid-item"><input type="text" name="engineer_recommendation" value="{{ entry.engineer_recommendation }}"></div>
+                <div class="grid-item">Resolved or Not</div>
+                <div class="grid-item"><input type="text" name="resolved_or_not" value="{{ entry.resolved_or_not }}"></div>
+
+                <div class="grid-item">Issue Description</div>
+                <div class="grid-item"><input type="text" name="issue_description" value="{{ entry.issue_description }}"></div>
+                <div class="grid-item">Engineer Email</div>
+                <div class="grid-item"><input type="text" name="engineer_email" value="{{ entry.engineer_email }}"></div>
+
+                <div class="grid-item">Manager Remarks</div>
+                <div class="grid-item"><input type="text" name="manager_remarks" value="{{ entry.manager_remarks }}"></div>
+                <div class="grid-item">Manager Email</div>
+                <div class="grid-item"><input type="text" name="manager_email" value="{{ entry.manager_email }}"></div>
+
+                <div class="grid-item">HOD Remarks</div>
+                <div class="grid-item"><input type="text" name="hod_remarks" value="{{ entry.hod_remarks }}"></div>
+                <div class="grid-item">HOD Approval Status</div>
+                <div class="grid-item"><input type="text" name="hod_approval_status" value="{{ entry.hod_approval_status }}"></div>
+
+                <div class="grid-item">Device to be Sent</div>
+                <div class="grid-item"><input type="text" name="device_to_be_sent" value="{{ entry.device_to_be_sent }}"></div>
+                <div class="grid-item">Call Status</div>
+                <div class="grid-item"><input type="text" name="call_status" value="{{ entry.call_status }}"></div>
+
+                <div class="grid-item">Final Action Taken</div>
+                <div class="grid-item"><input type="text" name="final_action_taken" value="{{ entry.final_action_taken }}"></div>
+                <div class="grid-item">Final Call Status</div>
+                <div class="grid-item"><input type="text" name="final_call_status" value="{{ entry.final_call_status }}"></div>
+
+                <div class="grid-item">Date of Closure</div>
+                <div class="grid-item"><input type="text" name="date_of_closure" value="{{ entry.date_of_closure|date:'Y-m-d H:i:s' }}"></div>
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </div>
 </body>
 </html>

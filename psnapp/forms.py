@@ -11,22 +11,15 @@ class PSNEntryForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'date_of_complaint': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'customer_raised_issue': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Customer Issue...', 'rows': 1, 'cols': 5}),
             'date_of_sale_of_device': forms.DateInput(attrs={'type': 'date'}),
+            'vehicle_sale_date': forms.DateInput(attrs={'type': 'date'}),
             's_trigger_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'c_trigger_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'commercial_expiry_date': forms.DateInput(attrs={'type': 'date'}),
             'first_communication_in_darby': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'last_communication_in_darby': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'vehicle_support_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'vehicle_sale_date': forms.DateInput(attrs={'type': 'date'}),
             'date_of_closure': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'external_modification': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'vehicle_type': forms.Select(attrs={'class': 'form-control select2'}),
-            'issue_description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description...', 'rows': 1, 'cols': 5}),
-            'manager_remarks': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Manager Remarks...', 'rows': 1, 'cols': 5}),
-            'hod_remarks': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'HOD Remarks...', 'rows': 1, 'cols': 5}),
-            'final_action_taken': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Final Action...', 'rows': 1, 'cols': 5})
         }
 
     def __init__(self, *args, **kwargs):
@@ -60,6 +53,18 @@ class PSNEntryForm(forms.ModelForm):
         if vehicle_running_location and not re.match(r'^[A-Z0-9!@#$%^&*()_+=-]*$', vehicle_running_location):
             raise forms.ValidationError("Vehicle Running Location must contain only capital letters, special characters, and numbers.")
         return vehicle_running_location
+
+    def clean_contact_number(self):
+        contact_number = self.cleaned_data.get('contact_number')
+        if contact_number and (not contact_number.isdigit() or len(contact_number) != 10):
+            raise forms.ValidationError("Contact number must be exactly 10 digits.")
+        return contact_number
+
+    def clean_device_psn(self):
+        device_psn = self.cleaned_data.get('device_PSN')
+        if device_psn and len(device_psn) != 10:
+            raise forms.ValidationError("Device PSN must be exactly 10 characters.")
+        return device_psn
 
 class EngineerResponseForm(forms.ModelForm):
     class Meta:
