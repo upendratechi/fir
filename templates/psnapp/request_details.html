@@ -76,122 +76,122 @@
             {% csrf_token %}
             <div class="grid-container">
                 <div class="grid-item">Date of Complaint</div>
-                <div class="grid-item"><input type="text" name="date_of_complaint" value="{{ entry.date_of_complaint|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.date_of_complaint }}</div>
                 <div class="grid-item">Centralised ID</div>
-                <div class="grid-item"><input type="text" name="centralised_id" value="{{ entry.centralised_id }}"></div>
+                <div class="grid-item">{{ form.centralised_id }}</div>
 
                 <div class="grid-item">Unique ID</div>
-                <div class="grid-item"><input type="text" name="unique_id" value="{{ entry.unique_id }}"></div>
+                <div class="grid-item">{{ form.unique_id }}</div>
                 <div class="grid-item">Customer Raised Issue</div>
-                <div class="grid-item"><input type="text" name="complaint_raised_name" value="{{ entry.complaint_raised_name }}"></div>
+                <div class="grid-item">{{ form.complaint_raised_name }}</div>
 
                 <div class="grid-item">Complaint Raised By</div>
-                <div class="grid-item"><input type="text" name="complaint_raised_by" value="{{ entry.complaint_raised_by }}"></div>
+                <div class="grid-item">{{ form.complaint_raised_by }}</div>
                 <div class="grid-item">Complaint Raised Name</div>
-                <div class="grid-item"><input type="text" name="complaint_raised_name" value="{{ entry.complaint_raised_name }}"></div>
+                <div class="grid-item">{{ form.complaint_raised_name }}</div>
 
                 <div class="grid-item">Contact Number</div>
-                <div class="grid-item"><input type="text" name="contact_number" value="{{ entry.contact_number }}"></div>
+                <div class="grid-item">{{ form.contact_number }}</div>
                 <div class="grid-item">Complaint Raised Through</div>
-                <div class="grid-item"><input type="text" name="complaint_raised_through" value="{{ entry.complaint_raised_through }}"></div>
+                <div class="grid-item">{{ form.complaint_raised_through }}</div>
 
                 <div class="grid-item">Service Engineer Name</div>
-                <div class="grid-item"><input type="text" name="service_engineer_name" value="{{ entry.service_engineer_name }}"></div>
+                <div class="grid-item">{{ form.service_engineer_name }}</div>
                 <div class="grid-item">Device Model</div>
-                <div class="grid-item"><input type="text" name="device_model" value="{{ entry.device_model }}"></div>
+                <div class="grid-item">{{ form.device_model }}</div>
 
                 <div class="grid-item">Device PSN</div>
-                <div class="grid-item"><input type="text" name="device_PSN" value="{{ entry.device_PSN }}"></div>
+                <div class="grid-item">{{ form.device_PSN }}</div>
                 <div class="grid-item">VIN Number</div>
-                <div class="grid-item"><input type="text" name="VIN_number" value="{{ entry.VIN_number }}"></div>
+                <div class="grid-item">{{ form.VIN_number }}</div>
 
                 <div class="grid-item">Firmware</div>
-                <div class="grid-item"><input type="text" name="firmware" value="{{ entry.firmware }}"></div>
+                <div class="grid-item">{{ form.firmware }}</div>
                 <div class="grid-item">Configuration</div>
-                <div class="grid-item"><input type="text" name="configuration" value="{{ entry.configuration }}"></div>
+                <div class="grid-item">{{ form.configuration }}</div>
 
                 <div class="grid-item">Device IMEI</div>
-                <div class="grid-item"><input type="text" name="device_IMEI" value="{{ entry.device_IMEI }}"></div>
+                <div class="grid-item">{{ form.device_IMEI }}</div>
                 <div class="grid-item">Device ICCID</div>
-                <div class="grid-item"><input type="text" name="device_ICCID" value="{{ entry.device_ICCID }}"></div>
+                <div class="grid-item">{{ form.device_ICCID }}</div>
 
                 <div class="grid-item">Date of Sale of Device</div>
-                <div class="grid-item"><input type="text" name="date_of_sale_of_device" value="{{ entry.date_of_sale_of_device|date:'Y-m-d' }}"></div>
+                <div class="grid-item">{{ form.date_of_sale_of_device }}</div>
                 <div class="grid-item">Telco Status</div>
-                <div class="grid-item"><input type="text" name="telco_status" value="{{ entry.telco_status }}"></div>
+                <div class="grid-item">{{ form.telco_status }}</div>
 
                 <div class="grid-item">Active Profile</div>
-                <div class="grid-item"><input type="text" name="active_profile" value="{{ entry.active_profile }}"></div>
+                <div class="grid-item">{{ form.active_profile }}</div>
                 <div class="grid-item">Vehicle Sale Date</div>
-                <div class="grid-item"><input type="text" name="vehicle_sale_date" value="{{ entry.vehicle_sale_date|date:'Y-m-d' }}"></div>
+                <div class="grid-item">{{ form.vehicle_sale_date }}</div>
 
                 <div class="grid-item">S Trigger Date</div>
-                <div class="grid-item"><input type="text" name="s_trigger_date" value="{{ entry.s_trigger_date|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.s_trigger_date }}</div>
                 <div class="grid-item">C Trigger Date</div>
-                <div class="grid-item"><input type="text" name="c_trigger_date" value="{{ entry.c_trigger_date|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.c_trigger_date }}</div>
 
                 <div class="grid-item">Commercial Expiry Date</div>
-                <div class="grid-item"><input type="text" name="commercial_expiry_date" value="{{ entry.commercial_expiry_date|date:'Y-m-d' }}"></div>
+                <div class="grid-item">{{ form.commercial_expiry_date }}</div>
                 <div class="grid-item">First Communication on Darby</div>
-                <div class="grid-item"><input type="text" name="first_communication_in_darby" value="{{ entry.first_communication_in_darby|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.first_communication_in_darby }}</div>
 
                 <div class="grid-item">Last Communication on Darby</div>
-                <div class="grid-item"><input type="text" name="last_communication_in_darby" value="{{ entry.last_communication_in_darby|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.last_communication_in_darby }}</div>
                 <div class="grid-item">Vehicle Support Date</div>
-                <div class="grid-item"><input type="text" name="vehicle_support_date" value="{{ entry.vehicle_support_date|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.vehicle_support_date }}</div>
 
                 <div class="grid-item">Vehicle Type</div>
-                <div class="grid-item"><input type="text" name="vehicle_type" value="{{ entry.vehicle_type }}"></div>
+                <div class="grid-item">{{ form.vehicle_type }}</div>
                 <div class="grid-item">Vehicle Running Location</div>
-                <div class="grid-item"><input type="text" name="vehicle_running_location" value="{{ entry.vehicle_running_location }}"></div>
+                <div class="grid-item">{{ form.vehicle_running_location }}</div>
 
                 <div class="grid-item">Vehicle Run</div>
-                <div class="grid-item"><input type="text" name="vehicle_run" value="{{ entry.vehicle_run }}"></div>
+                <div class="grid-item">{{ form.vehicle_run }}</div>
                 <div class="grid-item">Kilometers/Hours</div>
-                <div class="grid-item"><input type="text" name="kilometers_hours" value="{{ entry.kilometers_hours }}"></div>
+                <div class="grid-item">{{ form.kilometers_hours }}</div>
 
                 <div class="grid-item">Main Battery Voltage</div>
-                <div class="grid-item"><input type="text" name="main_battery_voltage" value="{{ entry.main_battery_voltage }}"></div>
+                <div class="grid-item">{{ form.main_battery_voltage }}</div>
                 <div class="grid-item">Issue Identified</div>
-                <div class="grid-item"><input type="text" name="issue_identified" value="{{ entry.issue_identified }}"></div>
+                <div class="grid-item">{{ form.issue_identified }}</div>
 
                 <div class="grid-item">Issue Analysis</div>
-                <div class="grid-item"><input type="text" name="issue_analysis" value="{{ entry.issue_analysis }}"></div>
+                <div class="grid-item">{{ form.issue_analysis }}</div>
                 <div class="grid-item">External Modification</div>
-                <div class="grid-item"><input type="text" name="external_modification" value="{{ entry.external_modification }}"></div>
+                <div class="grid-item">{{ form.external_modification }}</div>
 
                 <div class="grid-item">Engineer Recommendation</div>
-                <div class="grid-item"><input type="text" name="engineer_recommendation" value="{{ entry.engineer_recommendation }}"></div>
+                <div class="grid-item">{{ form.engineer_recommendation }}</div>
                 <div class="grid-item">Resolved or Not</div>
-                <div class="grid-item"><input type="text" name="resolved_or_not" value="{{ entry.resolved_or_not }}"></div>
+                <div class="grid-item">{{ form.resolved_or_not }}</div>
 
                 <div class="grid-item">Issue Description</div>
-                <div class="grid-item"><input type="text" name="issue_description" value="{{ entry.issue_description }}"></div>
+                <div class="grid-item">{{ form.issue_description }}</div>
                 <div class="grid-item">Engineer Email</div>
-                <div class="grid-item"><input type="text" name="engineer_email" value="{{ entry.engineer_email }}"></div>
+                <div class="grid-item">{{ form.engineer_email }}</div>
 
                 <div class="grid-item">Manager Remarks</div>
-                <div class="grid-item"><input type="text" name="manager_remarks" value="{{ entry.manager_remarks }}"></div>
+                <div class="grid-item">{{ form.manager_remarks }}</div>
                 <div class="grid-item">Manager Email</div>
-                <div class="grid-item"><input type="text" name="manager_email" value="{{ entry.manager_email }}"></div>
+                <div class="grid-item">{{ form.manager_email }}</div>
 
                 <div class="grid-item">HOD Remarks</div>
-                <div class="grid-item"><input type="text" name="hod_remarks" value="{{ entry.hod_remarks }}"></div>
+                <div class="grid-item">{{ form.hod_remarks }}</div>
                 <div class="grid-item">HOD Approval Status</div>
-                <div class="grid-item"><input type="text" name="hod_approval_status" value="{{ entry.hod_approval_status }}"></div>
+                <div class="grid-item">{{ form.hod_approval_status }}</div>
 
                 <div class="grid-item">Device to be Sent</div>
-                <div class="grid-item"><input type="text" name="device_to_be_sent" value="{{ entry.device_to_be_sent }}"></div>
+                <div class="grid-item">{{ form.device_to_be_sent }}</div>
                 <div class="grid-item">Call Status</div>
-                <div class="grid-item"><input type="text" name="call_status" value="{{ entry.call_status }}"></div>
+                <div class="grid-item">{{ form.call_status }}</div>
 
                 <div class="grid-item">Final Action Taken</div>
-                <div class="grid-item"><input type="text" name="final_action_taken" value="{{ entry.final_action_taken }}"></div>
+                <div class="grid-item">{{ form.final_action_taken }}</div>
                 <div class="grid-item">Final Call Status</div>
-                <div class="grid-item"><input type="text" name="final_call_status" value="{{ entry.final_call_status }}"></div>
+                <div class="grid-item">{{ form.final_call_status }}</div>
 
                 <div class="grid-item">Date of Closure</div>
-                <div class="grid-item"><input type="text" name="date_of_closure" value="{{ entry.date_of_closure|date:'Y-m-d H:i:s' }}"></div>
+                <div class="grid-item">{{ form.date_of_closure }}</div>
             </div>
             <button type="submit">Save</button>
         </form>
