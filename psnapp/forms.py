@@ -20,6 +20,12 @@ class PSNEntryForm(forms.ModelForm):
             'last_communication_in_darby': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'vehicle_support_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'date_of_closure': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'vehicle_type': forms.Select(attrs={'class': 'form-control select2'}),
+            'issue_description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description...', 'rows': 1, 'cols': 5}),
+            'manager_remarks': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Manager Remarks...', 'rows': 1, 'cols': 5}),
+            'hod_remarks': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'HOD Remarks...', 'rows': 1, 'cols': 5}),
+            'final_action_taken': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Final Action...', 'rows': 1, 'cols': 5}),
+            'customer_raised_issue':forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Name...', 'rows': 1, 'cols': 5}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -50,8 +56,9 @@ class PSNEntryForm(forms.ModelForm):
 
     def clean_vehicle_running_location(self):
         vehicle_running_location = self.cleaned_data.get('vehicle_running_location')
-        if vehicle_running_location and not re.match(r'^[A-Z0-9!@#$%^&*()_+=-]*$', vehicle_running_location):
-            raise forms.ValidationError("Vehicle Running Location must contain only capital letters, special characters, and numbers.")
+        # Updated regex to allow spaces
+        if vehicle_running_location and not re.match(r'^[A-Z0-9!@#$%^&*()_+=\- ]*$', vehicle_running_location):
+            raise forms.ValidationError("Vehicle Running Location must contain only capital letters, special characters, numbers, and spaces.")
         return vehicle_running_location
 
     def clean_contact_number(self):

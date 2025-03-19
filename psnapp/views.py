@@ -83,7 +83,7 @@ def send_summary_email(entry):
         'view_details_url': f"http://127.0.0.1:8000/request_details/{entry.id}/"
     })
     recipient_list = [entry.manager_email]
-    cc_list = [settings.HOD_EMAIL, entry.engineer_email]
+    cc_list = [settings.HOD_EMAIL, entry.engineer_email,'upendram@danlawtech.com']
     email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, cc=cc_list)
     email.content_subtype = 'html'  # To indicate the email content is HTML
     email.send()
@@ -128,7 +128,7 @@ def approve_request(request, id):
         'reject_url': f"http://127.0.0.1:8000/reject_hod_request/{entry.id}/",
          'view_details_url': f"http://127.0.0.1:8000/request_details/{entry.id}/"
     })
-    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [hod_email], cc=[engineer_email, entry.manager_email])
+    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [hod_email], cc=[engineer_email, entry.manager_email,'upendram@danlawtech.com'],)
     email.content_subtype = 'html'
     email.send()
 
@@ -152,7 +152,7 @@ def reject_request(request, id):
         'entry': entry,
     })
 
-    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[entry.manager_email, settings.HOD_EMAIL])
+    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[entry.manager_email, settings.HOD_EMAIL,'upendram@danlawtech.com'])
     email.content_subtype = 'html'  # To indicate the email content is HTML
     email.send()
 
@@ -211,7 +211,8 @@ def approve_hod_request(request, id):
         'Device Repair Request',
         'Please find the attached Device Repair Request.',
         settings.DEFAULT_FROM_EMAIL,
-        [entry.engineer_email],
+        [entry.engineer_email,'eliyasp@danlawtech.com','narendrareddyg@danlawtech.com','kunal@danlawtech.com'],  # To: Engineer's email
+        cc=[settings.HOD_EMAIL,'rajendrans@danlawtech.com','deepa@danlawems.com']  # CC: Manager and HOD emails
     )
     email.attach_file(pdf_file_path)
     email.send()
@@ -233,7 +234,7 @@ def reject_hod_request(request, id):
     subject = 'PSN Request Rejected by HOD'
     message = render_to_string('psnapp/engineer_rejection_email.html', {'entry': entry})
     
-    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[manager_email, hod_email])
+    email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [engineer_email], cc=[manager_email, hod_email,'upendram@danlawtech.com'])
     email.content_subtype = 'html'
     email.send()
     
@@ -429,4 +430,3 @@ def generate_unique_id(entry):
         sequence_number = 0
     unique_id = f"{service_engineer_initial}{year}{month}{sequence_number:04d}"
     return unique_id
-

@@ -12,9 +12,9 @@ def generate_device_repair_request_pdf(data, file_path):
     logo_image = Image(logo_image_path, 1.5 * inch, 0.5 * inch)  # Adjust size as needed
 
     header_data = [
-        [logo_image, "", "Device Repair Request", ""],
+        [logo_image, "", "FIR", ""],
         ["Product Code", data.get('device_model', 'N/A'), "Centralised ID", data.get('centralised_id', 'N/A')],
-        ["Customer", "AL", "Format Req. No.", "ASS/011/08/21 Ver-2"],
+        ["Customer", "O.E", "Format Req. No.", "ASS/011/08/21 Ver-2"],
         ["Document by", "After Sales Support Team", "Date", data.get('engineer_requested_date', 'N/A')]
     ]
     header_table = Table(header_data, colWidths=[1.5 * inch, 2 * inch, 2 * inch, 2 * inch])
@@ -23,6 +23,8 @@ def generate_device_repair_request_pdf(data, file_path):
         ('SPAN', (2, 0), (3, 0)),  # Span the title across two columns
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('FONTNAME', (2, 0), (3, 0), 'Helvetica-Bold'),  # Bold font for "FIR"
+        ('FONTSIZE', (2, 0), (3, 0), 16),  # Increased font size for "FIR"
         ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),  # Reduced font size
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),  # Reduced padding
