@@ -84,15 +84,33 @@
      <div class="container form-container">
         <div class="card">
             <div class="card-header">
-                FIR FORM -1
+                {% if edit_mode %}
+                    Edit FIR Entry - {{ entry.id }}
+                {% else %}
+                    FIR FORM -1
+                {% endif %}
                 <a href="{% url 'download_data' %}" class="download-btn">
                     <i class="fas fa-download"></i>
                 </a>
             </div>
             <div class="card-body">
 
-                <form id="psn-form" method="post" action="{% url 'psn_form' %}">
+                <form id="psn-form" method="post" action="">
                     {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <div class="row">
                     
                         <div class="col-md-3 mb-3">
@@ -261,7 +279,9 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-submit">Submit</button>
+                        <button type="submit" class="btn btn-submit">
+                            {% if edit_mode %} Update {% else %} Submit {% endif %}
+                        </button>
                     </div>
 
                 </form>

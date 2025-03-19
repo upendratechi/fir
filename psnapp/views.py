@@ -383,15 +383,19 @@ def success(request):
     return render(request, 'psnapp/success.html')
 
 def request_details(request, id):
-    entry = get_object_or_404(PSNEntry, id=id)
+    entry = get_object_or_404(PSNEntry, id=id)  # Fetch the PSNEntry instance by ID
     if request.method == 'POST':
-        form = PSNEntryForm(request.POST, instance=entry)
+        form = PSNEntryForm(request.POST, request.FILES, instance=entry)  # Bind the form to the existing instance
         if form.is_valid():
-            form.save()
-            return redirect('request_details', id=entry.id)
+            form.save()  # Save the updated data
+            messages.success(request, 'The entry has been updated successfully.')
+            return redirect('request_details', id=entry.id)  # Redirect to the same page to reflect changes
+        else:
+            messages.error(request, 'There was an error updating the entry. Please check the form.')
+            print(form.errors)  # Print form errors to the console for debugging
     else:
-        form = PSNEntryForm(instance=entry)
-    return render(request, 'psnapp/request_details.html', {'entry': entry, 'form': form})
+        form = PSNEntryForm(instance=entry)  # Populate the form with existing data
+    return render(request, 'psnapp/psn_form.html', {'form': form, 'entry': entry, 'edit_mode': True})
 
 def psn_entry_create(request):
     if request.method == 'POST':
