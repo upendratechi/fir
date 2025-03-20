@@ -50,7 +50,7 @@ class PSNEntryForm(forms.ModelForm):
 
     def clean_device_iccid(self):
         device_iccid = self.cleaned_data.get('device_ICCID')
-        if device_iccid and (not str(device_iccid).isdigit() or len(str(device_iccid)) != 20):
+        if device_iccid and (not str(device_iccid).isdigit() or len(str(device_iccid)) == 20):
             raise forms.ValidationError("ICCID must be exactly 20 digits.")
         return device_iccid
 

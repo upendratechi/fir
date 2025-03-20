@@ -1,0 +1,600 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PSN Form</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .form-container {
+            max-width: 95%;
+            margin: 30px auto;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: linear-gradient(to right, #007bff, #00c6ff);
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 12px 12px 0 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            box-shadow: none;
+            transition: all 0.3s ease-in-out;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .btn-submit {
+            background: linear-gradient(to right, #28a745, #218838);
+            color: white;
+            font-size: 1.2rem;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-submit:hover {
+            background: linear-gradient(to right, #218838, #1e7e34);
+        }
+        textarea {
+            min-height: 100px;
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .download-btn i {
+            margin-right: 5px;
+        }
+        .edit-btn {
+            cursor: pointer;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+     <div class="container form-container">
+        <div class="card">
+            <div class="card-header">
+                {% if edit_mode %}
+                    Edit FIR Entry - {{ entry.id }}
+                {% else %}
+                    FIR FORM -1
+                {% endif %}
+                <div>
+                    <a href="{% url 'download_data' %}" class="download-btn">
+                        <i class="fas fa-download"></i>
+                    </a>
+                    {% if not entry.hod_approval_status == 'Approved' %}
+                        {% if not edit_mode %}
+                            <a href="?edit=true" class="edit-btn">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        {% else %}
+                            <a href="?edit=false" class="edit-btn">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                {% if edit_mode %}
+                <form id="psn-form" method="post" action="">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.date_of_complaint|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.customer_raised_issue|as_crispy_field }}
+                        </div> 
+                        <div class="col-md-3 mb-3">
+                            {{ form.complaint_raised_by|as_crispy_field }}
+                        </div> 
+                        <div class="col-md-3 mb-3">
+                            {{ form.complaint_raised_name|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.contact_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.complaint_raised_through|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.service_engineer_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.device_model|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.device_PSN|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.VIN_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.firmware|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.configuration|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.device_IMEI|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.device_ICCID|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.date_of_sale_of_device|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.telco_status|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.active_profile|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.vehicle_sale_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.s_trigger_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.c_trigger_date|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.commercial_expiry_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.first_communication_in_darby|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.last_communication_in_darby|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.vehicle_type|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.vehicle_running_location|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.vehicle_run|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.kilometers_hours|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.main_battery_voltage|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.vehicle_support_date|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.issue_identified|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.external_modification|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.issue_analysis|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.resolved_or_not|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.issue_description|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.engineer_recommendation|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.engineer_email|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            {{ form.manager_remarks|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.manager_email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.hod_remarks|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.hod_approval_status|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.device_to_be_sent|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.call_status|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.final_action_taken|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.final_call_status|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.date_of_closure|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{ form.upload_file|as_crispy_field }}
+                        </div>
+
+                    </div>
+                    <div id="success-message" class="alert alert-success" style="display: none;">
+                        Your response is successfully submitted. Thanks for your patience.
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-submit">
+                            Update
+                        </button>
+                    </div>
+
+                </form>
+                {% else %}
+                <div id="view-mode">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Date of Complaint:</label>
+                            <p>{{ entry.date_of_complaint }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Customer Raised Issue:</label>
+                            <p>{{ entry.customer_raised_issue }}</p>
+                        </div> 
+                        <div class="col-md-3 mb-3">
+                            <label>Complaint Raised By:</label>
+                            <p>{{ entry.complaint_raised_by }}</p>
+                        </div> 
+                        <div class="col-md-3 mb-3">
+                            <label>Complaint Raised Name:</label>
+                            <p>{{ entry.complaint_raised_name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Contact Number:</label>
+                            <p>{{ entry.contact_number }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Complaint Raised Through:</label>
+                            <p>{{ entry.complaint_raised_through }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Service Engineer Name:</label>
+                            <p>{{ entry.service_engineer_name }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Device Model:</label>
+                            <p>{{ entry.device_model }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Device PSN:</label>
+                            <p>{{ entry.device_PSN }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>VIN Number:</label>
+                            <p>{{ entry.VIN_number }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Firmware:</label>
+                            <p>{{ entry.firmware }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Configuration:</label>
+                            <p>{{ entry.configuration }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Device IMEI:</label>
+                            <p>{{ entry.device_IMEI }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Device ICCID:</label>
+                            <p>{{ entry.device_ICCID }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Date of Sale of Device:</label>
+                            <p>{{ entry.date_of_sale_of_device }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Telco Status:</label>
+                            <p>{{ entry.telco_status }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Active Profile:</label>
+                            <p>{{ entry.active_profile }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Vehicle Sale Date:</label>
+                            <p>{{ entry.vehicle_sale_date }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>S Trigger Date:</label>
+                            <p>{{ entry.s_trigger_date }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>C Trigger Date:</label>
+                            <p>{{ entry.c_trigger_date }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Commercial Expiry Date:</label>
+                            <p>{{ entry.commercial_expiry_date }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>First Communication in Darby:</label>
+                            <p>{{ entry.first_communication_in_darby }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Last Communication in Darby:</label>
+                            <p>{{ entry.last_communication_in_darby }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Vehicle Type:</label>
+                            <p>{{ entry.vehicle_type }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Vehicle Running Location:</label>
+                            <p>{{ entry.vehicle_running_location }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Vehicle Run:</label>
+                            <p>{{ entry.vehicle_run }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Kilometers/Hours:</label>
+                            <p>{{ entry.kilometers_hours }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Main Battery Voltage:</label>
+                            <p>{{ entry.main_battery_voltage }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Vehicle Support Date:</label>
+                            <p>{{ entry.vehicle_support_date }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Issue Identified:</label>
+                            <p>{{ entry.issue_identified }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>External Modification:</label>
+                            <p>{{ entry.external_modification }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Issue Analysis:</label>
+                            <p>{{ entry.issue_analysis }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Resolved or Not:</label>
+                            <p>{{ entry.resolved_or_not }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Issue Description:</label>
+                            <p>{{ entry.issue_description }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Engineer Recommendation:</label>
+                            <p>{{ entry.engineer_recommendation }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Engineer Email:</label>
+                            <p>{{ entry.engineer_email }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Manager Remarks:</label>
+                            <p>{{ entry.manager_remarks }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Manager Email:</label>
+                            <p>{{ entry.manager_email }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>HOD Remarks:</label>
+                            <p>{{ entry.hod_remarks }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>HOD Approval Status:</label>
+                            <p>{{ entry.hod_approval_status }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Device to be Sent:</label>
+                            <p>{{ entry.device_to_be_sent }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Call Status:</label>
+                            <p>{{ entry.call_status }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Final Action Taken:</label>
+                            <p>{{ entry.final_action_taken }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Final Call Status:</label>
+                            <p>{{ entry.final_call_status }}</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Date of Closure:</label>
+                            <p>{{ entry.date_of_closure }}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const firmwareInput = document.querySelector('input[name="firmware"]');
+            firmwareInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+
+            const imeiInput = document.querySelector('input[name="device_IMEI"]');
+            imeiInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 15);
+            });
+
+            const iccidInput = document.querySelector('input[name="device_ICCID"]');
+            iccidInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20);
+            });
+
+            const vehicleRunningLocationInput = document.querySelector('input[name="vehicle_running_location"]');
+            vehicleRunningLocationInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9!@#$%^&*()_+ =-]/g, '');
+            });
+
+            const resolvedOrNot = document.querySelector('select[name="resolved_or_not"]');
+            const callStatus = document.querySelector('select[name="call_status"]');
+            const fieldsToShowIfResolved = [
+                'call_status',
+                'final_action_taken',
+                'final_call_status',
+                'date_of_closure'
+            ];
+            const fieldsToShowIfNotResolved = [
+                'issue_description',
+                'engineer_recommendation',
+                'engineer_email',
+                'manager_remarks',
+                'manager_email',
+                'hod_remarks',
+                'hod_approval_status',
+                'device_to_be_sent'
+            ];
+
+            function toggleFields() {
+                const isResolved = resolvedOrNot.value === 'Yes';
+                fieldsToShowIfResolved.forEach(fieldName => {
+                    const field = document.querySelector(`[name="${fieldName}"]`).closest('.col-md-3');
+                    field.style.display = isResolved ? 'block' : 'none';
+                });
+                fieldsToShowIfNotResolved.forEach(fieldName => {
+                    const field = document.querySelector(`[name="${fieldName}"]`).closest('.col-md-3');
+                    field.style.display = !isResolved ? 'block' : 'none';
+                });
+
+                if (callStatus.value === 'Closed') {
+                    document.querySelector('select[name="final_call_status"]').disabled = true;
+                } else {
+                    document.querySelector('select[name="final_call_status"]').disabled = false;
+                }
+            }
+
+            resolvedOrNot.addEventListener('change', toggleFields);
+            callStatus.addEventListener('change', toggleFields);
+            toggleFields(); // Initial call to set the correct state
+
+            // Ensure fields are enabled before form submission
+            document.querySelector('form').addEventListener('submit', function() {
+                fieldsToShowIfResolved.concat(fieldsToShowIfNotResolved).forEach(fieldName => {
+                    const field = document.querySelector(`[name="${fieldName}"]`);
+                    if (field) {
+                        field.disabled = false;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
