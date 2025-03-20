@@ -211,8 +211,8 @@ def approve_hod_request(request, id):
         'Device Repair Request',
         'Please find the attached Device Repair Request.',
         settings.DEFAULT_FROM_EMAIL,
-        [entry.engineer_email,'eliyasp@danlawtech.com','narendrareddyg@danlawtech.com','kunal@danlawtech.com'],  # To: Engineer's email
-        cc=[settings.HOD_EMAIL,'rajendrans@danlawtech.com','deepa@danlawems.com']  # CC: Manager and HOD emails
+        [entry.engineer_email],  # To: Engineer's email
+        cc=[settings.HOD_EMAIL]  # CC: Manager and HOD emails
     )
     email.attach_file(pdf_file_path)
     email.send()
@@ -384,18 +384,23 @@ def success(request):
 
 def request_details(request, id):
     entry = get_object_or_404(PSNEntry, id=id)  # Fetch the PSNEntry instance by ID
-    if request.method == 'POST':
-        form = PSNEntryForm(request.POST, request.FILES, instance=entry)  # Bind the form to the existing instance
-        if form.is_valid():
-            form.save()  # Save the updated data
-            messages.success(request, 'The entry has been updated successfully.')
-            return redirect('request_details', id=entry.id)  # Redirect to the same page to reflect changes
+    edit_mode = request.GET.get('edit', 'false') == 'true'  # Check if edit mode is enabled
+
+    if request.method == 'POST' and edit_mode:
+        if entry.hod_approval_status == 'Approved':
+            messages.error(request, 'This entry has been approved by the HOD and cannot be edited.')
         else:
-            messages.error(request, 'There was an error updating the entry. Please check the form.')
-            print(form.errors)  # Print form errors to the console for debugging
+            form = PSNEntryForm(request.POST, request.FILES, instance=entry)  # Bind the form to the existing instance
+            if form.is_valid():
+                form.save()  # Save the updated data
+                messages.success(request, 'The entry has been updated successfully.')
+                return redirect('request_details', id=entry.id)  # Redirect to the same page to reflect changes
+            else:
+                messages.error(request, 'There was an error updating the entry. Please check the form.')
     else:
         form = PSNEntryForm(instance=entry)  # Populate the form with existing data
-    return render(request, 'psnapp/psn_form.html', {'form': form, 'entry': entry, 'edit_mode': True})
+
+    return render(request, 'psnapp/psn_form_edit.html', {'form': form, 'entry': entry, 'edit_mode': edit_mode})
 
 def psn_entry_create(request):
     if request.method == 'POST':
@@ -434,3 +439,20 @@ def generate_unique_id(entry):
         sequence_number = 0
     unique_id = f"{service_engineer_initial}{year}{month}{sequence_number:04d}"
     return unique_id
+
+def psn_form_edit(request, id):
+    entry = get_object_or_404(PSNEntry, id=id)
+    if request.method == 'POST':
+        if entry.hod_approval_status == 'Approved':
+            messages.error(request, 'This entry has been approved by the HOD and cannot be edited.')
+        else:
+            form = PSNEntryForm(request.POST, request.FILES, instance=entry)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'The entry has been updated successfully.')
+                return redirect('request_details', id=entry.id)
+            else:
+                messages.error(request, 'There was an error updating the entry. Please check the form.')
+    else:
+        form = PSNEntryForm(instance=entry)
+    return render(request, 'psnapp/psn_form_edit.html', {'form': form, 'entry': entry})

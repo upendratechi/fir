@@ -191,4 +191,4 @@ class PSNEntry(models.Model):
     engineer_requested_date = models.DateTimeField(auto_now_add=True)  # Automatically set the current datetime when created
 
     def __str__(self):
-        return self.service_engineer_name if self.service_engineer_name else 'PSN Entry'
+        return self.unique_id if self.unique_id else 'PSN Entry'
